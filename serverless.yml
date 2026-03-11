@@ -1,0 +1,59 @@
+service: create-user-with-sso
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-2
+  stage: ${opt:stage, 'stg'}
+  memorySize: 1024
+  timeout: 30
+  logRetentionInDays: ${self:custom.logRetention.${self:provider.stage}, 14}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - cognito-idp:AdminListGroupsForUser
+          Resource:
+            - ${env:COGNITO_USER_POOL_ARN, '*'}
+  environment:
+    NODE_ENV: ${self:provider.stage}
+    COGNITO_REGION: ${env:COGNITO_REGION, self:provider.region}
+    DB_HOST: ${env:DB_HOST, ''}
+    DB_PORT: ${env:DB_PORT, '3306'}
+    DB_NAME: ${env:DB_NAME, ''}
+    DB_USERNAME: ${env:DB_USERNAME, ''}
+    DB_PASSWORD: ${env:DB_PASSWORD, ''}
+    DB_POOL_MAX: ${env:DB_POOL_MAX, '5'}
+    ALLOW_EMAIL_LINK: ${env:ALLOW_EMAIL_LINK, 'false'}
+    FAIL_ON_ERROR: ${env:FAIL_ON_ERROR, 'false'}
+
+custom:
+  logRetention:
+    stg: 14
+    prod: 365
+
+functions:
+  create_user_with_sso:
+    handler: index.handler
+    maximumRetryAttempts: 0
+    package:
+      patterns:
+        - "index.js"
+        - "node_modules/**"
+        - "package.json"
+        - "package-lock.json"
+        - "!events/**"
+        - "!README.md"
+    # Option 1: attach trigger manually with AWS CLI or Console (recommended for existing user pool)
+    # Option 2: uncomment below if you want Serverless to manage trigger mapping
+    # events:
+    #   - cognitoUserPool:
+    #       pool: ${env:COGNITO_USER_POOL_NAME}
+    #       trigger: PostAuthentication
+    #       existing: true
+    #       forceDeploy: true
+
+package:
+  individually: true

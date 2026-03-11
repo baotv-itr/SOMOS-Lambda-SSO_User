@@ -1,0 +1,24 @@
+{
+  "version": "1",
+  "triggerSource": "PostAuthentication_Authentication",
+  "region": "us-east-2",
+  "userPoolId": "us-east-2_example",
+  "userName": "duo_01f7example",
+  "callerContext": {
+    "awsSdkVersion": "aws-sdk-unknown-unknown",
+    "clientId": "exampleclientid"
+  },
+  "request": {
+    "userAttributes": {
+      "sub": "3b0a9f99-30f9-4a21-a9c5-6f7ee4d57bb1",
+      "email": "john.doe@example.com",
+      "email_verified": "true",
+      "name": "John Doe",
+      "given_name": "John",
+      "family_name": "Doe",
+      "preferred_username": "john.doe"
+    },
+    "newDeviceUsed": false
+  },
+  "response": {}
+}

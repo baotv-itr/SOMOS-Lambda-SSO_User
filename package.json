@@ -1,0 +1,21 @@
+{
+  "name": "create-user-with-sso",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "invoke": "serverless invoke local --stage stg --function create_user_with_sso --path events/direct.json",
+    "invoke:cognito": "serverless invoke local --stage stg --function create_user_with_sso --path events/cognito-post-auth.json",
+    "deploy:stg": "serverless deploy --stage stg",
+    "deploy:prod": "serverless deploy --stage prod",
+    "remove:stg": "serverless remove --stage stg",
+    "remove:prod": "serverless remove --stage prod"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.972.0",
+    "mysql2": "^3.14.5"
+  },
+  "devDependencies": {
+    "serverless": "^3.39.0"
+  }
+}
